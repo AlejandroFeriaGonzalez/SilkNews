@@ -20,3 +20,8 @@ dependencies = [
     "wheel>=0.45.1",
     "spacy>=3.8.7",
 ]
+
+[dependency-groups]
+dev = [
+    "pip>=25.2",
+]
