@@ -1,0 +1,5 @@
+Fuente: chequeado
+URL: None
+Título: No, la IA de Meta no puede acceder a los chats de WhatsApp de forma automática
+
+Descripción: La IA de Meta en WhatsApp sólo puede leer mensajes que la mencionen y lo que el usuario elige compartir con ella, según aseguraron desde la empresa aChequeado.Los mensajes personales son privados y permanecen cifrados de extremo a extremo.
