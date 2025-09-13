@@ -6,5 +6,4 @@
 
 ## Noticias falsas
 - [ColombiaCheck](https://colombiacheck.com/)
-- [Maldita.es](https://maldita.es/)
 - [Chequeado](https://chequeado.com/)
