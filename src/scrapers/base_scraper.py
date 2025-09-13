@@ -24,27 +24,66 @@ def get_html_requests(url, headers=None, sleep_time=1):
         return None
 
 
-def get_html_selenium(url, sleep_time=3):
+def init_selenium_driver(headless=True):
+    """
+    Inicializa un driver de Selenium con opciones por defecto y sin logs molestos.
+    """
+    options = webdriver.ChromeOptions()
+    if headless:
+        options.add_argument("--headless=new")  # nueva forma más estable
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
+    options.add_argument("--disable-extensions")
+    options.add_argument("--disable-gpu")
+    options.add_argument("--disable-notifications")
+    options.add_argument("--disable-software-rasterizer")
+    options.add_argument("--mute-audio")
+    options.add_argument("--log-level=3")
+
+    # Quitar logs de DevTools
+    options.add_experimental_option("excludeSwitches", ["enable-logging", "enable-automation"])
+    options.add_experimental_option('useAutomationExtension', False)
+
+    service = Service(ChromeDriverManager().install())
+    service.log_path = "NUL"   # en Windows (o "/dev/null" en Linux/Mac)
+
+    driver = webdriver.Chrome(service=service, options=options)
+    return driver
+
+
+def get_html_selenium(url, sleep_time=3, headless=True):
     """
     Descarga el HTML usando Selenium.
     Retorna BeautifulSoup o None si falla.
     """
     try:
-        options = webdriver.ChromeOptions()
-        options.add_argument("--headless")
-        options.add_argument("--no-sandbox")
-        options.add_argument("--disable-dev-shm-usage")
-
-        driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+        driver = init_selenium_driver(headless=headless)
         driver.get(url)
         time.sleep(sleep_time)
         html = driver.page_source
         driver.quit()
-
         return BeautifulSoup(html, "html.parser")
     except Exception as e:
         print(f"[ERROR selenium] {url} -> {e}")
         return None
+
+
+def scroll_page(driver, times=3, wait=2):
+    """
+    Scrollea la pagina hacia abajo 'times' veces con espera entre scrolls.
+    """
+    for _ in range(times):
+        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+        time.sleep(wait)
+
+
+def incremental_scroll(driver, wait=2, step=800):
+    """
+    Hace scroll incremental hacia abajo en pasos de `step` píxeles.
+    """
+    current_pos = driver.execute_script("return window.pageYOffset;")
+    driver.execute_script(f"window.scrollTo(0, {current_pos + step});")
+    time.sleep(wait)
 
 
 def extract_links(soup, css_selector, limit=None):
