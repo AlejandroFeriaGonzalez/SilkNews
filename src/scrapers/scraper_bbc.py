@@ -1,4 +1,6 @@
 from base_scraper import get_html_requests
+from utils.file_manager import save_articles
+from utils.csv_manager import save_articles_csv
 
 def scrape_bbc(limit=50):
     """
@@ -41,6 +43,8 @@ def scrape_bbc(limit=50):
 
 if __name__ == "__main__":
     noticias = scrape_bbc(limit=50)
+    save_articles(noticias, label="verdad", portal="bbc")
+    save_articles_csv(noticias, label="verdad", portal="bbc") 
     print(f"Se extrajeron {len(noticias)} noticias de BBC Mundo.")
     # for i, n in enumerate(noticias[:5], 1):
     #     print(f"{i}. {n['title']} -> {n['url']}")
